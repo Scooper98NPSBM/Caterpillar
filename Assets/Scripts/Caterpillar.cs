@@ -11,6 +11,10 @@ public class Caterpillar : MonoBehaviour
    public Transform segmentPrefab;
 
    public int initialSize = 2;
+  
+   [SerializeField] private AudioClip collectSound;
+   [SerializeField] private AudioClip deathSound;
+   
 
    private void Start()
    {
@@ -77,12 +81,16 @@ public class Caterpillar : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-         if (other.tag == "Food")
-         {
+         if (other.CompareTag("Food"))
+         {     
+            SoundFxManager.instance.PlaySoundFXClip(collectSound, transform, 1f);       
+             GameManager.Instance.score += 20;
              Grow();
+                  
          }
-            else if (other.tag == "Obstacle")
-            {
+            else if (other.CompareTag("Obstacle"))
+            {    
+                SoundFxManager.instance.PlaySoundFXClip(deathSound, transform, 1f);           
                 ResetState();
             }
     }

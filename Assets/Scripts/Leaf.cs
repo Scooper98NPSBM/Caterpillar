@@ -25,7 +25,7 @@ public class Leaf : MonoBehaviour
      {
          if (other.tag == "Player")
          {
-             RandomizePosition();
+            RandomizePosition();
          }
      }             
 }

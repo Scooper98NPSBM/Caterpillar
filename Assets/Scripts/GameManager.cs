@@ -1,18 +1,63 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using TMPro;
 
-public class Gamemanager : MonoBehaviour
+public class GameManager : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()        
+    public static GameManager Instance { get; private set; }
+    public TextMeshProUGUI scoreText;
+    public TextMeshProUGUI HighscoreText;
+
+    public float score;
+
+    private void Awake()
     {
-      Debug.Log("GameManager.Start");  
+        if (Instance == null) {
+            Instance = this; 
+        }   else {
+            DestroyImmediate(gameObject);
+        }
     }
 
-    // Update is called once per frame
-    void Update()
+    private void OnDestroy()
     {
+        if (Instance == this) {
+            Instance = null;
+        }
+    }
+
+
+    private void Start()
+    {
+        ResetGame();
+    } 
+
+
+    private void Update()
+    {
+        score += Time.deltaTime;
+        scoreText.text = Mathf.FloorToInt(score).ToString("D5");
         
+    }
+
+    public void ResetGame()
+    {
+        score = 0;        
+        UpdateHighscore();
+    }
+
+    private void UpdateHighscore()
+    {
+      float Highscore = PlayerPrefs.GetFloat("Highscore", 0);
+
+        if (score > Highscore)
+        {
+            Highscore = score;
+            PlayerPrefs.SetFloat("Highscore", Highscore);
+        }
+
+        HighscoreText.text = Mathf.FloorToInt(Highscore).ToString("D5");
     }
 }
