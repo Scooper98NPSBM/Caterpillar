@@ -5,7 +5,7 @@ using UnityEngine;
 public class Leaf : MonoBehaviour
 {
     public BoxCollider2D gridArea;
-
+    
     private void Start()
     {
         RandomizePosition();

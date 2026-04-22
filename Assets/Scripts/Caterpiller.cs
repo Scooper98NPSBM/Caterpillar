@@ -2,7 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Caterpillar : MonoBehaviour
+public class Caterpiller : MonoBehaviour
+
 {
    private Vector2 direction = Vector2.right;
 
@@ -11,15 +12,22 @@ public class Caterpillar : MonoBehaviour
    public Transform segmentPrefab;
 
    public int initialSize = 2;
-  
+
+   public CameraShakeManager cameraShake;
+   public float shakeDuration = 0.2f;
+   public float shakeMagnitude = 0.2f;
+     
    [SerializeField] private AudioClip collectSound;
-   [SerializeField] private AudioClip deathSound;
-   
+   [SerializeField] private AudioClip deathSound;  
 
    private void Start()
    {
-      ResetState();
-   }    
+    segments = new List<Transform>();
+    segments.Add(this.transform);
+
+    for (int i = 1; i < this.initialSize; i++)
+        segments.Add(Instantiate(this.segmentPrefab));
+   }       
 
    private void Update()
    {
@@ -64,8 +72,8 @@ public class Caterpillar : MonoBehaviour
     }
 
     private void ResetState()
-    {
-        for (int i = 1; i < segments.Count; i++)
+    {  
+         for (int i = 1; i < segments.Count; i++)
         {
             Destroy(segments[i].gameObject);
         }
@@ -73,10 +81,10 @@ public class Caterpillar : MonoBehaviour
         segments.Clear();
         segments.Add(this.transform);
 
-        for (int i = 1; i < initialSize; i++)
+        for (int i = 1; i < this.initialSize; i++)
         segments.Add(Instantiate(this.segmentPrefab));
       
-        this.transform.position = Vector3.zero;
+        this.transform.position = Vector3.zero;           
     }
 
     private void OnTriggerEnter2D(Collider2D other)
@@ -84,14 +92,15 @@ public class Caterpillar : MonoBehaviour
          if (other.CompareTag("Food"))
          {     
             SoundFxManager.instance.PlaySoundFXClip(collectSound, transform, 1f);       
-             GameManager.Instance.score += 20;
-             Grow();
-                  
+            GameManager.Instance.score += 25;             
+            Grow();                                     
          }
             else if (other.CompareTag("Obstacle"))
             {    
                 SoundFxManager.instance.PlaySoundFXClip(deathSound, transform, 1f);           
-                ResetState();
-            }
-    }
+                cameraShake.TriggerShake(shakeDuration, shakeMagnitude);                
+                ResetState(); 
+                GameManager.Instance.ResetGame();                                                           
+            }                
+    }      
 }

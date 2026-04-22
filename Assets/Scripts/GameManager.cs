@@ -7,18 +7,21 @@ using TMPro;
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance { get; private set; }
+
+    
     public TextMeshProUGUI scoreText;
     public TextMeshProUGUI HighscoreText;
-
-    public float score;
-
-    private void Awake()
-    {
+       
+    public float score; 
+    
+    
+     private void Awake()
+    {        
         if (Instance == null) {
             Instance = this; 
         }   else {
             DestroyImmediate(gameObject);
-        }
+        }        
     }
 
     private void OnDestroy()
@@ -28,29 +31,27 @@ public class GameManager : MonoBehaviour
         }
     }
 
-
-    private void Start()
+     private void Start()
     {
         ResetGame();
     } 
-
-
+  
+         
     private void Update()
     {
         score += Time.deltaTime;
-        scoreText.text = Mathf.FloorToInt(score).ToString("D5");
-        
+        scoreText.text = Mathf.FloorToInt(score).ToString("D5");        
     }
 
     public void ResetGame()
-    {
-        score = 0;        
+    {              
         UpdateHighscore();
+        score = 0;
     }
 
     private void UpdateHighscore()
     {
-      float Highscore = PlayerPrefs.GetFloat("Highscore", 0);
+        float Highscore = PlayerPrefs.GetFloat("Highscore", 0);
 
         if (score > Highscore)
         {
