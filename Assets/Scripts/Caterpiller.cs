@@ -16,9 +16,12 @@ public class Caterpiller : MonoBehaviour
    public CameraShakeManager cameraShake;
    public float shakeDuration = 0.2f;
    public float shakeMagnitude = 0.2f;
-     
+
+        
    [SerializeField] private AudioClip collectSound;
    [SerializeField] private AudioClip deathSound;  
+   [SerializeField] private AudioClip flowerSound;
+
 
    private void Start()
    {
@@ -93,14 +96,22 @@ public class Caterpiller : MonoBehaviour
          {     
             SoundFxManager.instance.PlaySoundFXClip(collectSound, transform, 1f);       
             GameManager.Instance.score += 25;             
-            Grow();                                     
+            Grow();              
+            Destroy(other.gameObject);                                                
          }
             else if (other.CompareTag("Obstacle"))
             {    
                 SoundFxManager.instance.PlaySoundFXClip(deathSound, transform, 1f);           
                 cameraShake.TriggerShake(shakeDuration, shakeMagnitude);                
                 ResetState(); 
-                GameManager.Instance.ResetGame();                                                           
-            }                
+                GameManager.Instance.ResetGame();                                                                          
+            } 
+            else if (other.CompareTag("Flower"))  
+            {
+                SoundFxManager.instance.PlaySoundFXClip(flowerSound, transform, 1f);
+                GameManager.Instance.score += 100;  
+                Destroy(other.gameObject);                
+                ResetState(); 
+            }                          
     }      
 }

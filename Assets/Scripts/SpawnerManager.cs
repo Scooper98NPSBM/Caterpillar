@@ -2,19 +2,19 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Leaf : MonoBehaviour
+public class SpawnerManager : MonoBehaviour
 {
     public BoxCollider2D gridArea;
-    public GameObject Leafprefab;
+    public GameObject Flowerprefab;
     public float spawnTime = 45f;
     private float timeElapsed = 0f; 
-    
+    public static int amountSpawned;
+
     private void Start()
-    {        
-        RandomizePosition();
+    {
+        amountSpawned = 0;
     }
-      
-       
+             
     private void RandomizePosition()
     {        
         Bounds bounds = this.gridArea.bounds;
@@ -22,7 +22,7 @@ public class Leaf : MonoBehaviour
         float x = Random.Range(bounds.min.x, bounds.max.x);
         float y = Random.Range(bounds.min.y, bounds.max.y);
         
-        GameObject instance = Instantiate(Leafprefab);
+        GameObject instance = Instantiate(Flowerprefab);
         instance.transform.position = new Vector3(x, y, instance.transform.position.z);
     }
 
